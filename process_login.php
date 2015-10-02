@@ -26,7 +26,10 @@ if(isset($_POST["login"])) {
   
   if (mysqli_num_rows($result) > 0):
     # Username exists. Login!
-    echo("Login successful!");
+    $_SESSION["username"] = $username;
+    # Set the maker ID
+    # Set the maker name
+    header("Location: maker_page.php");
   
   else:
     # Login failed. Return to the first page with failed post message.

@@ -33,7 +33,8 @@ if(isset($_POST["register"])) {
   if($result):
     $_SESSION["name"] = $name;
     $_SESSION["username"] = $username;
-    header("Location: maker_menu.php");
+    # Set the maker ID
+    header("Location: maker_page.php");
     
   # If it fails...
   else:

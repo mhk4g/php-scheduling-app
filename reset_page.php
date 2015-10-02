@@ -4,7 +4,7 @@ session_start();
 
 <html>
 <head>
-  <title>Maker login</title>
+  <title>Maker password reset</title>
 </head>
 <body>
   <br><p align="center"><img src="./img/reset.png">
