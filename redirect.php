@@ -19,8 +19,11 @@ elseif(isset($_POST["login"])):
   
 # Redirects to edit page
 elseif(isset($_POST["edit"])):
-  header("LocationL edit_page.php");
+  header("Location: edit_page.php");
   die;
 
+else:
+  header("Location: 404.php");
+  die;
 endif;
 ?>

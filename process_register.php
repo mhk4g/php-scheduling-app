@@ -5,12 +5,13 @@ session_unset();
 # Reload login page if user or pass were left blank
 if(empty($_POST["username"]) || empty($_POST["password"])):
   $_SESSION["error"] = "Please enter an email address and password.";
-  header("Location: assignment2.php");
+  header("Location: register_page.php");
   die;
 endif;
 
 $username = $_POST["username"];
 $password = $_POST["password"];
+$name = $_POST["newname"];
 $dbuser = "mhk4g";
 $dbpass = "password";
 $hashedpw = hash("sha256", $password);
@@ -20,25 +21,8 @@ if ($db->connect_error) {
     die("Could not connect to database: " . $db->connect_error);
   }
 
-# If login button was clicked...
-if(isset($_POST["login"])) {
-  $result = $db->query("SELECT * from Makers where email='$username' AND password='$hashedpw'");
-  
-  if (mysqli_num_rows($result) > 0):
-    # Username exists. Login!
-    echo("GOOD JOB LOGIN!");
-  
-  else:
-    # Login failed. Return to the first page with failed post message.
-    $_SESSION["error"] = "Invalid email address or password.";
-    header("Location: assignment2.php");
-  endif;
-  }
-
 # If register was clicked...
-elseif(isset($_POST["register"])) {
-  echo("<br>REGISTER<br>");
-  $name = $_POST["newname"];
+if(isset($_POST["register"])) {
   
   # Attempt to insert into database
   $query = "INSERT INTO Makers (name, email, password) VALUES ('$name', '$username', '$hashedpw')"; 
@@ -54,7 +38,7 @@ elseif(isset($_POST["register"])) {
   # If it fails...
   else:
     $_SESSION["error"] = "An account with that email address already exists.";
-    header("Location: assignment2.php");
+    header("Location: register_page.php");
   endif;
 }
 ?>
