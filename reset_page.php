@@ -1,0 +1,25 @@
+<?php  
+session_start();
+?>
+
+<html>
+<head>
+  <title>Maker login</title>
+</head>
+<body>
+  <br><p align="center"><img src="./img/reset.png">
+    <?php
+    if(isset($_SESSION["error"])):
+      $error = $_SESSION["error"];
+      session_unset();
+      echo("<p><pre><font color=\"red\"><p align=\"center\">$error</font></pre>");
+  else:
+  echo("<p><pre><font color=\"white\"><p align=\"center\"> </font></pre>");
+endif;
+    ?>
+<pre><form action="process_reset.php" method="post">
+<p align="center">Email:   <input type="text" name="username" autocomplete="off"><p align="center">
+<p align="center"><input type="submit" name="login" value="Reset password"></form></pre>
+<br><br><br><br><br><br><br><br>
+<form action="redirect.php" method="post"><pre><p align="center"><input type="submit" name="register" value="Register">   <input type="submit" name="reset" value="Reset password">
+</pre></form></body>
