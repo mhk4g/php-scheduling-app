@@ -22,7 +22,6 @@ if ($db->connect_error) {
     die("Could not connect to database: " . $db->connect_error);
   }
 
-
 ?>
 
 <html>
@@ -31,13 +30,9 @@ if ($db->connect_error) {
 </head>
 <body>
   <br><p align="center"><img src="./img/new.png">
-    <?php
-  echo("<p><pre><font color=\"black\"><p align=\"center\">Welcome, $name!</font></pre>");
-    ?>
 <br>
-<form action="new_schedule_page.php" method="post"><pre>
-<p align ="center">Please enter email addresses separated by commas.
-<textarea rows="6" cols="50" name="niceboy"></textarea> 
+<form action="new_schedule_page.php" method="get"><pre>
+<p align ="center"> How many users would you like to add? <input type="text" name="newusers" size=5 autocomplete="off"> 
 </form>
 <br><br><br><br><br><br><br><br><br>
 <form action="logout.php" method="post"><pre><p align="center"><input type="submit" name="logout" value="Logout">
