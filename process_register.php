@@ -9,11 +9,11 @@ if(empty($_POST["username"]) || empty($_POST["password"])):
   die;
 endif;
 
+$dbuser = "mhk4g";
+$dbpass = "password";
 $username = $_POST["username"];
 $password = $_POST["password"];
 $name = $_POST["newname"];
-$dbuser = "mhk4g";
-$dbpass = "password";
 $hashedpw = hash("sha256", $password);
 
 $db = new mysqli('localhost', $dbuser, $dbpass, "ScheduleDB");
@@ -27,12 +27,11 @@ if(isset($_POST["register"])) {
   # Attempt to insert into database
   $query = "INSERT INTO Makers (name, email, password) VALUES ('$name', '$username', '$hashedpw')"; 
   $result = $db->query($query);
-  var_dump($result);
   
   # If the entry is successfully created...
   if($result):
-    $_SESSION["name"] = $name;
-    $_SESSION["username"] = $username;
+    $_SESSION["maker_email"] = $username;
+    $_SESSION["maker_name"] = $name;
     # Set the maker ID
     header("Location: maker_page.php");
     
