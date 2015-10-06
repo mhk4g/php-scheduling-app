@@ -14,8 +14,23 @@ else:
   die;
 endif;
 
-# Test method to print session 
+# TEST METHOD TO PRINT SESSION VARIABLES
 print_r($_SESSION);
+
+?> 
+
+<html>
+<head>
+  <title>Maker account page</title>
+</head>
+<body>
+  <br><p align="center"><img src="./img/edit.png">
+    <?php
+  echo("<p><pre><font color=\"black\"><p align=\"center\">Welcome, $name!</font></pre>");
+    ?>
+
+<?php
+# Test method to print session 
 
 $db = new mysqli('localhost', $dbuser, $dbpass, "ScheduleDB");
 if ($db->connect_error) {
@@ -28,75 +43,71 @@ $makerID = $result->fetch_assoc()["ID"];
 $_SESSION["makerID"] = $makerID;
 
 $scheduleArray = $db->query("SELECT * FROM Schedules WHERE maker = '$makerID'");
-$timeslot = $result->fetch_assoc();
-print_r($timeslot);
+$num_schedules = $scheduleArray->num_rows;
 
-/*
-$date = strtotime($tempstrings[0]);
-$currentdate = date('l m/d/y', $date);
+// * * * * FOR EACH SCHEDULE* * * * //
+for($i = 0; $i < $num_schedules; $i++) {
+  $currentSchedule = $scheduleArray->fetch_assoc();
+  $currentScheduleID = $currentSchedule["ID"];
+  $currentScheduleName = $currentSchedule["name"];
+  $currentScheduleNumslots = $currentSchedule["numslots"];
 
-$times = explode("|",$tempstrings[1]);
-foreach($times as $currenttime):
-  $unformatted = strtotime($currenttime);
-  $formatted = $currentdate . "\n" . date('g:i A',$unformatted);
-  $slots[$slotindex] = $formatted;
-  $slotindex++;
-  $numslots++;
-endforeach;
-
-/ * * * * * Table Creation * * * * 
-<table border = "1" cellpadding = "4" width="90%" align="center">
-<caption><h2>Select your meeting times</h2></caption>
-<tr align = "center">
-  <th style="width:40px">User</th>
-  <th style="width:40px">Action</th>
-
-<?php
-# Prints the headers from the $slots array
-foreach($slots as $s){
-  echo("<th style=\"width:40px\"><b>$s</b></th>");
-  }
-echo("</tr>");
-
- * * * * * Data cell population * * * * 
-$userindex = 0;
-# Prints one row for each existing user
-foreach($users as $u){
+  echo("<table border = \"1\" cellpadding = \"4\" width=\"90%\" align=\"center\">");
+  echo("<caption><h2>$currentScheduleName</h2></caption>");
   echo("<tr align = \"center\">");
+  echo("<th style=\"width:40px\">User</th>");
+  echo("<th style=\"width:40px\">Email</th>");
+  echo("<th style=\"width:40px\">ID</th>");
 
-  # Displays Edit button if cookie is set
-  if (isset($_COOKIE[strtr($u, " ", "_")])) {
-    echo("<form action=\"editing.php\" method=\"POST\">");
-    echo("<td><b>$u</b></td>");
-    echo("<td><input type=\"submit\" name=\"$u\" value=\"Edit\"<td>");
-    echo("<input type=\"hidden\" name=\"oldname\" value=\"$u\">");
-    echo("<input type=\"hidden\" name=\"userindex\" value=\"$userindex\">");
-    echo("</form>");
-    }
-  else {
-    echo("<td><b>$u</b></td>");
-    echo("<td> </td>");
+  # Fetch timeslots from DB
+  $timeSlotArray = $db->query("SELECT * FROM Timeslots WHERE schedule = '$currentScheduleID'");
+  $checksPerSlot = [];
+  // * * * * FOR EACH TIMESLOT * * * * //
+  for($j = 0; $j < $currentScheduleNumslots; $j++){
+    $currentColumn = $timeSlotArray->fetch_assoc();
+    $currentColumnString = $currentColumn["datestring"];
+    $checksPerSlot[] = 0;
+    echo("<th style=\"width:40px\"><b>$currentColumnString</b></th>");
   }
-  display_populated_row($u, $numslots, $userindex, $userarrays);
-  $userindex++;
-}
+  echo("</tr>");
+  
+  //* * * * * Data cell population * * * *//
+ $userArray = $db->query("SELECT * FROM Users WHERE schedule = '$currentScheduleID'");
+ 
+ for($k = 0; $k < $userArray->num_rows; $k++) {
+      $currentUser = $userArray->fetch_assoc();
+      $currentUserID = $currentUser["ID"];
+      $currentUserEmail = $currentUser["email"];
+      $currentUserName = $currentUser["name"];
+      echo("<tr align = \"center\">");
+      echo("<td>$currentUserName</td>");
+      echo("<td>$currentUserEmail</td>");
+      echo("<td>$currentUserID</td>");
+      $currentUserCheckboxes = explode("^", $currentUser["checkboxes"]);
+      for($l = 0; $l < $currentScheduleNumslots; $l++) {
+        if($currentUserCheckboxes[$l]):
+        echo("<td>&#10003</td>");
+        $checksPerSlot[$l]++;
+      else:
+        echo("<td> </td>");
+      endif;
+        }
+      }
+  
+  // * * * * PRINT TOTALS PER SLOT * * * * //    
+  echo("<tr align = \"center\">");
+  echo("<td colspan=\"3\"><b>Total</b></td>");
+ for($m = 0; $m < $currentScheduleNumslots; $m++) {
+   echo("<td><b>$checksPerSlot[$m]</b></td>"); 
+ }
+    
+  echo("</table><br><br><br>");
+
+} // SCHEDULE
 
 
 
-*/
-
-
+echo("<br><br><br><br><br><br><br><br><br><br>");
+echo("<form action=\"logout.php\" method=\"post\"><pre><p align=\"center\"><input type=\"submit\" name=\"logout\" value=\"Logout\">");
+echo("</pre></form></body>");
 ?>
-
-<html>
-<head>
-  <title>Maker account page</title>
-</head>
-<body>
-  <br><p align="center"><img src="./img/edit.png">
-    <?php
-  echo("<p><pre><font color=\"black\"><p align=\"center\">Welcome, $name!</font></pre>");
-    ?>
-<br><br><br><br><br><br><br><br><br><br>
-<form action="logout.php" method="post"><pre><p align="center"><input type="submit" name="logout" value="Logout">
-</pre></form></body>

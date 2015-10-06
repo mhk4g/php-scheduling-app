@@ -15,7 +15,7 @@ else:
 endif;
 
 # Test method to print session 
-print_r($_SESSION);
+print_r($_SESSION); 
 
 $db = new mysqli('localhost', $dbuser, $dbpass, "ScheduleDB");
 if ($db->connect_error) {
