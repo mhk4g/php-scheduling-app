@@ -14,9 +14,6 @@ else:
   die;
 endif;
 
-# TEST METHOD TO PRINT SESSION VARIABLES
-print_r($_SESSION);
-
 ?> 
 
 <html>
@@ -26,7 +23,7 @@ print_r($_SESSION);
 <body>
   <br><p align="center"><img src="./img/edit.png">
     <?php
-  echo("<p><pre><font color=\"black\"><p align=\"center\">Welcome, $name!</font></pre>");
+  echo("<p><pre><font color=\"black\"><p align=\"center\">Welcome, $name!</font><br><br>");
     ?>
 
 <?php
@@ -55,7 +52,7 @@ for($i = 0; $i < $num_schedules; $i++) {
   echo("<table border = \"1\" cellpadding = \"4\" width=\"90%\" align=\"center\">");
   echo("<caption><h2>$currentScheduleName</h2></caption>");
   echo("<tr align = \"center\">");
-  echo("<th style=\"width:40px\">User</th>");
+  echo("<th style=\"width:40px\">Name</th>");
   echo("<th style=\"width:40px\">Email</th>");
   echo("<th style=\"width:40px\">ID</th>");
 
@@ -100,13 +97,15 @@ for($i = 0; $i < $num_schedules; $i++) {
  for($m = 0; $m < $currentScheduleNumslots; $m++) {
    echo("<td><b>$checksPerSlot[$m]</b></td>"); 
  }
-    
-  echo("</table><br><br><br>");
+ // * * * * PRINT EDIT BUTTONS * * * * //
+  echo("</table><form action=\"edit_table.php\">");
+  echo("<p align=\"center\"><input type=\"submit\" name=\"edit\" value=\"Edit this table\">");
+  echo("<input type=\"submit\" name=\"finalize\" value=\"Finalize this table\"></form>");
+  echo("<br><br>");
 
 } // SCHEDULE
 
-
-
+// * * * * PRINT LOGOUT BUTTON * * * * //
 echo("<br><br><br><br><br><br><br><br><br><br>");
 echo("<form action=\"logout.php\" method=\"post\"><pre><p align=\"center\"><input type=\"submit\" name=\"logout\" value=\"Logout\">");
 echo("</pre></form></body>");
