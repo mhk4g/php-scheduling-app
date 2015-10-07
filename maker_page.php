@@ -14,20 +14,10 @@ else:
   die;
 endif;
 
-?> 
-
-<html>
-<head>
-  <title>Maker account page</title>
-</head>
-<body>
-  <br><p align="center"><img src="./img/edit.png">
-    <?php
-  echo("<p><pre><font color=\"black\"><p align=\"center\">Welcome, $name!</font><br><br>");
-    ?>
-
-<?php
-# Test method to print session 
+# Print image and welcome message
+echo("<html><head><title>Maker account page</title></head><body>");
+echo("<br><p align=\"center\"><img src=\"./img/edit.png\">");
+echo("<p><pre><font color=\"black\"><p align=\"center\">Welcome, $name!</font><br><br>");
 
 $db = new mysqli('localhost', $dbuser, $dbpass, "ScheduleDB");
 if ($db->connect_error) {
@@ -42,13 +32,14 @@ $_SESSION["makerID"] = $makerID;
 $scheduleArray = $db->query("SELECT * FROM Schedules WHERE maker = '$makerID'");
 $num_schedules = $scheduleArray->num_rows;
 
-// * * * * FOR EACH SCHEDULE* * * * //
+# For each schedule belonging to the current maker...
 for($i = 0; $i < $num_schedules; $i++) {
   $currentSchedule = $scheduleArray->fetch_assoc();
   $currentScheduleID = $currentSchedule["ID"];
   $currentScheduleName = $currentSchedule["name"];
   $currentScheduleNumslots = $currentSchedule["numslots"];
 
+  # Create the table to display the schedule
   echo("<table border = \"1\" cellpadding = \"4\" width=\"90%\" align=\"center\">");
   echo("<caption><h2>$currentScheduleName</h2></caption>");
   echo("<tr align = \"center\">");
@@ -59,7 +50,8 @@ for($i = 0; $i < $num_schedules; $i++) {
   # Fetch timeslots from DB
   $timeSlotArray = $db->query("SELECT * FROM Timeslots WHERE schedule = '$currentScheduleID'");
   $checksPerSlot = [];
-  // * * * * FOR EACH TIMESLOT * * * * //
+  
+  # Write each timeslot to its own column header
   for($j = 0; $j < $currentScheduleNumslots; $j++){
     $currentColumn = $timeSlotArray->fetch_assoc();
     $currentColumnString = $currentColumn["datestring"];
@@ -68,34 +60,35 @@ for($i = 0; $i < $num_schedules; $i++) {
   }
   echo("</tr>");
   
-  //* * * * * Data cell population * * * *//
+  # Get all users that are linked to the current schedule
  $userArray = $db->query("SELECT * FROM Users WHERE schedule = '$currentScheduleID'");
  
- for($k = 0; $k < $userArray->num_rows; $k++) {
-      $currentUser = $userArray->fetch_assoc();
-      $currentUserID = $currentUser["ID"];
-      $currentUserEmail = $currentUser["email"];
-      $currentUserName = $currentUser["name"];
-      echo("<tr align = \"center\">");
-      echo("<td>$currentUserName</td>");
-      echo("<td>$currentUserEmail</td>");
-      echo("<td>$currentUserID</td>");
-      $currentUserCheckboxes = explode("^", $currentUser["checkboxes"]);
-      for($l = 0; $l < $currentScheduleNumslots; $l++) {
-        if($currentUserCheckboxes[$l]):
-        echo("<td>&#10003</td>");
-        $checksPerSlot[$l]++;
-      else:
-        echo("<td> </td>");
-      endif;
-        }
+ # Write each user to their own row
+  for($k = 0; $k < $userArray->num_rows; $k++) {
+    $currentUser = $userArray->fetch_assoc();
+    $currentUserID = $currentUser["ID"];
+    $currentUserEmail = $currentUser["email"];
+    $currentUserName = $currentUser["name"];
+    echo("<tr align = \"center\">");
+    echo("<td>$currentUserName</td>");
+    echo("<td>$currentUserEmail</td>");
+    echo("<td>$currentUserID</td>");
+    $currentUserCheckboxes = explode("^", $currentUser["checkboxes"]);
+    for($l = 0; $l < $currentScheduleNumslots; $l++) {
+      if($currentUserCheckboxes[$l]):
+      echo("<td>&#10003</td>");
+      $checksPerSlot[$l]++;
+    else:
+      echo("<td> </td>");
+    endif;
       }
-  
-  // * * * * PRINT TOTALS PER SLOT * * * * //    
+    }
+
+  #     
   echo("<tr align = \"center\">");
   echo("<td colspan=\"3\"><b>Total</b></td>");
- for($m = 0; $m < $currentScheduleNumslots; $m++) {
-   echo("<td><b>$checksPerSlot[$m]</b></td>"); 
+  for($m = 0; $m < $currentScheduleNumslots; $m++) {
+    echo("<td><b>$checksPerSlot[$m]</b></td>"); 
  }
  // * * * * PRINT EDIT BUTTONS * * * * //
   echo("</table><form action=\"edit_table.php\">");
