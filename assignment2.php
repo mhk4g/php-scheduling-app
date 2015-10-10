@@ -15,7 +15,7 @@ session_start();
   <?php
   if(isset($_SESSION["error"])) {
     $error = $_SESSION["error"];
-    session_unset();
+    unset($_SESSION["error"]);
     echo("<p><pre><font color=\"red\"><p align=\"center\">$error</font></pre>");
   }
   ?>

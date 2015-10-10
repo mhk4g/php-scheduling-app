@@ -19,6 +19,12 @@ echo("<html><head><title>Maker account page</title></head><body>");
 echo("<br><p align=\"center\"><img src=\"./img/edit.png\">");
 echo("<p><pre><font color=\"black\"><p align=\"center\">Welcome, $name!</font><br><br>");
 
+if(isset($_SESSION["error"])) {
+  $error = $_SESSION["error"];
+  unset($_SESSION["error"]);
+  echo("<p><pre><font color=\"red\"><p align=\"center\">$error</font></pre>");
+}
+
 $db = new mysqli('localhost', $dbuser, $dbpass, "ScheduleDB");
 if ($db->connect_error) {
     die("Could not connect to database: " . $db->connect_error);
@@ -38,10 +44,19 @@ for($i = 0; $i < $num_schedules; $i++) {
   $currentScheduleID = $currentSchedule["ID"];
   $currentScheduleName = $currentSchedule["name"];
   $currentScheduleNumslots = $currentSchedule["numslots"];
+  $currentScheduleIsFinalized = $currentSchedule["finalized"];
 
   # Create the table to display the schedule
-  echo("<table border = \"1\" cellpadding = \"4\" width=\"90%\" align=\"center\">");
-  echo("<caption><h2>$currentScheduleName</h2></caption>");
+  echo("<table border = \"1\" cellpadding = \"4\" width=\"50%\" align=\"center\">");
+  echo("<caption><h2>$currentScheduleName</h2>");
+  if(!$currentScheduleIsFinalized):
+    echo("<form action=\"finalize.php\" method=\"POST\">");
+    echo("<input type=\"submit\" name=\"finalize\" value=\"Finalize this schedule\" onclick=\"return confirm('Are you sure you want to finalize this table? This cannot be undone.')\">");
+    echo("<input type=\"hidden\" name=\"which\" value=\"$i\"><p></form>");
+  else:
+    echo("(Final)<p>");
+  endif;
+  echo("</caption>");
   echo("<tr align = \"center\">");
   echo("<th style=\"width:40px\">Name</th>");
   echo("<th style=\"width:40px\">Email</th>");
@@ -91,10 +106,7 @@ for($i = 0; $i < $num_schedules; $i++) {
     echo("<td><b>$checksPerSlot[$m]</b></td>"); 
  }
  // * * * * PRINT EDIT BUTTONS * * * * //
-  echo("</table><form action=\"edit_table.php\">");
-  echo("<p align=\"center\"><input type=\"submit\" name=\"edit\" value=\"Edit this table\">");
-  echo("<input type=\"submit\" name=\"finalize\" value=\"Finalize this table\"></form>");
-  echo("<br><br>");
+  echo("</table><br><br>");
 
 } // SCHEDULE
 
