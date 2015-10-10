@@ -1,6 +1,10 @@
 <?php
   session_start();
   
+  if(!isset($_POST["username"])):
+    $_POST["username"] = "mhk4g@virginia.edu";
+  endif;
+  
   // On MAC the path is usually:
   $mailpath = '/Applications/XAMPP/xamppfiles/PHPMailer';
 
@@ -16,14 +20,21 @@
   $mail->SMTPSecure = "tls"; // sets tls authentication
   $mail->Host = "smtp.gmail.com"; // sets GMAIL as the SMTP server; or your email service
   $mail->Port = 587; // set the SMTP port for GMAIL server; or your email server port
+  $mail->IsHTML(true);
   $mail->Username = "DBMailer.mhk4g@gmail.com"; // email username
   $mail->Password = "cs4501pass"; // email password
 
   #$sender = strip_tags($_POST["sender"]);
   $sender = "MakerDB";
   $receiver = strip_tags($_POST["username"]);
+  $receiverGET = strtr($receiver, "@", "*");
+  
   $subj = "Password reset";
-  $msg = strip_tags($_POST["msg"]);
+  $msg = "<pre><h2>Password Reset</h2><br><p>Hello! 
+  
+  This email will allow you to reset your MakerDB password. Please click this link: <a href=\"localhost/maker-schedule-db/security_question.php?username=$receiverGET\">Reset password</a><br>
+  
+  Regards, <br>      MakerDB Staff";
 
   // Put information into the message
   $mail->addAddress($receiver);
