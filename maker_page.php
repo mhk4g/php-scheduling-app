@@ -35,6 +35,8 @@ $result = $db->query("SELECT ID FROM Makers where email='$maker'");
 $makerID = $result->fetch_assoc()["ID"];
 $_SESSION["makerID"] = $makerID;
 
+echo("<form action=\"new_schedule_page.php\" method=\"POST\"><p align=\"center\"><input type=\"submit\" name=\"newschedule\" value=\"Make a new schedule\"></form><br>");
+
 $scheduleArray = $db->query("SELECT * FROM Schedules WHERE maker = '$makerID'");
 $num_schedules = $scheduleArray->num_rows;
 

@@ -9,20 +9,21 @@ if ($db->connect_error) {
     die("Could not connect to database: " . $db->connect_error);
   }
 
-# Standard error message display
-if(isset($_SESSION["error"])):
-  $error = $_SESSION["error"];
-  unset($_SESSION["error"]);
-  echo("<p><pre><font color=\"red\"><p align=\"center\">$error</font></pre>");
-else:
-  echo("<p><pre><font color=\"white\"><p align=\"center\"> </font></pre>");
-endif;
-
-# Arrived at page using email link should set this variable properly
+# First visit: username is in GET link, so switch it to session and reload
 if(isset($_GET["username"])) {
+  
+  # First visit: switch to session variables and reload
   $username = strtr($_GET["username"], "*", "@");
-  $GETresult = $db->query("SELECT * from Makers where email='$username'");
   $_SESSION["username"] = $username;
+  header("Location: security_question.php");
+  die;
+}  
+  
+# Subsequent visits: username is in SESSION
+elseif(isset($_SESSION["username"])) {
+
+$username = $_SESSION["username"];
+$SESSIONresult = $db->query("SELECT * from Makers where email='$username'");
 
 # If submit flag is active, then check the info.
 if(isset($_POST["submit"])) {
@@ -31,30 +32,46 @@ if(isset($_POST["submit"])) {
   $POSTresult = $db->query("SELECT * from Makers where securityanswer='$answer'");
   
   # If the security question was answered correctly and new password is valid...
-  if ((mysqli_num_rows($POSTresult) > 0) && $_POST["newpass"] == $_POST["confirm"]):
+  if ((mysqli_num_rows($POSTresult) > 0) && ($_POST["newpass"] == $_POST["confirm"])):
     $hashedpw = hash("SHA256", $_POST["newpass"]);
-    $user = $_SESSION["username"];
-    $resetpw = $db->query("UPDATE Makers SET password = '$hashedpw' WHERE email = '$user'");
+    $resetpw = $db->query("UPDATE Makers SET password = '$hashedpw' WHERE email = '$username'");
+    $_SESSION["error"] = "Password reset successful.";
+    header("Location: login_page.php");
+    die;
     
-  # If new password is invalid...
-  elseif($_POST["newpass"] != $_POST["confirm"]):
-    $_SESSION["error"] = "An account with that email address already exists.";
+  # If answer was right but new password is invalid...
+  elseif((mysqli_num_rows($POSTresult) > 0) && ($_POST["newpass"] != $_POST["confirm"])):
+    $_SESSION["error"] = "The new password you entered could not be confirmed. Please try again.";
     header("Location: security_question.php");
     die;
-  endif;
   
+  # If the answer was incorrect...
+  else:
+    $_SESSION["error"] = "Your answer is incorrect. Please try again.";
+    header("Location: security_question.php");
+    die;
+    endif;
   }
   
-  if (mysqli_num_rows($GETresult) > 0):
+  if (mysqli_num_rows($SESSIONresult) > 0):
     
     # Username exists. Print question!
-    $temp = $GETresult->fetch_assoc();
+    $temp = $SESSIONresult->fetch_assoc();
     $question = $temp["securityquestion"];
     $answer = hash("sha256", $temp["securityanswer"]);
     
     echo("
     <html><head><title>Maker password reset</title></head><body>
     <br><p align=\"center\"><img src=\"./img/reset.png\">");
+    
+    # Standard error message display
+    if(isset($_SESSION["error"])):
+      $error = $_SESSION["error"];
+      unset($_SESSION["error"]);
+      echo("<p><pre><font color=\"red\"><p align=\"center\">$error</font></pre>");
+    else:
+      echo("<p><pre><font color=\"white\"><p align=\"center\"> </font></pre>");
+    endif;
     
     echo("<p><pre><font color=\"black\"><p align=\"center\">$question</font></pre>
     <pre><form action=\"security_question.php\" method=\"post\"><p align=\"center\">
@@ -69,11 +86,10 @@ if(isset($_POST["submit"])) {
 else:
     
   # Login failed. Return to the first page with failed post message.
-  $_SESSION["error"] = "There is no maker account associated with that email address.";
+  $_SESSION["error"] = "Something went terribly wrong. Let's start over, shall we?";
   header("Location: login_page.php");
-  
+  die;
 endif;
 }
-
 
 ?>
