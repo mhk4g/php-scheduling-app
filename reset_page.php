@@ -18,7 +18,7 @@ session_start();
 endif;
     ?>
 <pre><form action="process_reset.php" method="post">
-<p align="center">Email:   <input type="text" name="username" autocomplete="off"><p align="center">
+<p align="center">Email:   <input type="text" name="username" autocomplete="off" required><p align="center">
 <p align="center"><input type="submit" name="reset" value="Reset my password"></form></pre>
 <br><br><br><br><br><br><br><br><br>
 <form action="redirect.php" method="post"><pre><p align="center"><input type="submit" name="login" value="Login">   <input type="submit" name="register" value="Register">
