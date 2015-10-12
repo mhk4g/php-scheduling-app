@@ -30,6 +30,7 @@ if(isset($_POST["login"])) {
     $temp = $result->fetch_assoc();
     $_SESSION["maker_email"] = $username;
     $_SESSION["maker_name"] = $temp["name"];
+    $_SESSION["maker_ID"] = $temp["ID"];
     header("Location: maker_page.php");
   
   else:
