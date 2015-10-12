@@ -113,7 +113,7 @@ for($i = 1; $i < $num_schedules + 1; $i++) {
 } // SCHEDULE
 
 // * * * * PRINT LOGOUT BUTTON * * * * //
-echo("<br><br><br><br><br><br><br><br><br><br>");
+echo("<br><br><br><br><br><br>");
 echo("<form action=\"logout.php\" method=\"post\"><pre><p align=\"center\"><input type=\"submit\" name=\"logout\" value=\"Logout\">");
 echo("</pre></form></body>");
 ?>
