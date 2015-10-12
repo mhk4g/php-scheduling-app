@@ -66,26 +66,31 @@ for($i = 0; $i < $num_schedules; $i++) {
     echo("<tr align = \"center\" valign=\"middle\">");
     echo("<td>$currentUserName</td>");
     echo("<td>$currentUserEmail</td>");
+    
+    # If the current user is equal to the logged in user...
     if($currentUserID == $userID):
       echo("<td valign=\"center\"><form action=\"process_user_edit.php\" method=\"post\"><p><input type=\"submit\" name=\"submit\" value=\"Submit\">");
+
+    # If the current user is not the logged in user...
     else:
-      echo("<td><form action=\"null.php\" method=\"post\"><p><input type=\"submit\" name=\"nullbutton\" value=\" \" hidden><font color=\"white\">N\A</font></form>");    
+      echo("<td><form action=\"null.php\" method=\"post\"><p><input type=\"submit\" name=\"nullbutton\" value=\" \" hidden><font color=\"white\">N\A</font>");    
     endif;
     echo("</td>");
     $currentUserCheckboxes = explode("^", $currentUser["checkboxes"]);
 
-    if($currentUserID == $userID){
+    # If the current user in the loop is the logged in user...
+    if($currentUserID == $userID) {
       for($l = 0; $l < $currentScheduleNumslots; $l++) {
         if($currentUserCheckboxes[$l]):
-          echo("<td><input type=\"checkbox\" name=\"box$l\" value=\"\" checked form=\"process_user_edit.php\"></td>");
+          echo("<td><input type=\"checkbox\" name=\"box$l\" value=\"\" checked></td>");
           $checksPerSlot[$l]++;
         else:
           echo("<td><input type=\"checkbox\" name=\"box$l\"value=\"\"></td>");
         endif;
       }
-      echo("</form>");
     }
-      
+    
+    # If the current user is not the logged in user...
     else {
       for($l = 0; $l < $currentScheduleNumslots; $l++) {
         if($currentUserCheckboxes[$l]):
@@ -96,6 +101,7 @@ for($i = 0; $i < $num_schedules; $i++) {
       endif;
         }
       }
+      echo("</form>");
     }
     
   echo("<tr align = \"center\">");
