@@ -30,5 +30,5 @@ if ($db->connect_error) {
   
 $result = $db->query("UPDATE Users SET checkboxes = '$writestring' WHERE ID = '$userID'");
 
-header("Location: user_page.php");
+#header("Location: user_page.php");
  ?>

@@ -1,6 +1,10 @@
 <?php 
 session_start();
 
+$winnerID = $_SESSION["best_slot_ID"];
+$winnerValue = $_SESSION["best_slot_value"];
+$winnerIndex = $_SESSION["best_slot_index"];
+
 $dbuser = "mhk4g";
 $dbpass = "password";
 
@@ -16,9 +20,11 @@ else:
   header("Location: maker_page.php");
 endif;
 
-
-
 $finalize = $db->query("UPDATE Schedules SET finalized = '1' WHERE ID = '$IDtoFinalize'");
+
+ # UPDATE DB
+
+ # SEND MAIL
 
 header("Location: maker_page.php");
 ?>

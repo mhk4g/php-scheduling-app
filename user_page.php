@@ -24,7 +24,7 @@ $resultArray = $result->fetch_assoc();
 $userFirstName = explode(" ",$resultArray["name"])[0];
 
 # Print image and welcome message
-echo("<html><head><title>Maker account page</title></head><body>");
+echo("<html><head><title>User page</title></head><body>");
 echo("<br><p align=\"center\"><img src=\"./img/welcome.png\">");
 echo("<p><pre><font color=\"black\"><p align=\"center\">Welcome, $userFirstName!</font><br><br>");
 
@@ -90,7 +90,6 @@ for($i = 0; $i < $num_schedules; $i++) {
       }
     }
 
-  #     
   echo("<tr align = \"center\">");
   echo("<td colspan=\"3\"><p><p><b>Total</b><p></td>");
   for($m = 0; $m < $currentScheduleNumslots; $m++) {
@@ -98,4 +97,5 @@ for($i = 0; $i < $num_schedules; $i++) {
  }
 
 }
+
 ?>

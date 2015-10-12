@@ -39,6 +39,9 @@ echo("<form action=\"new_schedule_page.php\" method=\"POST\"><p align=\"center\"
 
 $scheduleArray = $db->query("SELECT * FROM Schedules WHERE maker = '$maker_ID'");
 $num_schedules = $scheduleArray->num_rows;
+$currentWinnerValue = 0;
+$currentWinnerIndex = 0;
+$currentWinnerID = 0;
 
 # For each schedule belonging to the current maker...
 for($i = 1; $i < $num_schedules + 1; $i++) {
@@ -52,7 +55,7 @@ for($i = 1; $i < $num_schedules + 1; $i++) {
   echo("<table border = \"1\" cellpadding = \"4\" width=\"50%\" align=\"center\">");
   echo("<caption><h2>$currentScheduleName</h2>");
   if(!$currentScheduleIsFinalized):
-    echo("<form action=\"finalize.php\" method=\"POST\">");
+    echo("<form action=\"process_finalize.php\" method=\"POST\">");
     echo("<input type=\"submit\" name=\"finalize\" value=\"Finalize this schedule\" onclick=\"return confirm('Are you sure you want to finalize this table? This cannot be undone.')\">");
     echo("<input type=\"hidden\" name=\"which\" value=\"$currentScheduleID\"><p></form>");
   else:
@@ -67,12 +70,14 @@ for($i = 1; $i < $num_schedules + 1; $i++) {
   # Fetch timeslots from DB
   $timeSlotArray = $db->query("SELECT * FROM Timeslots WHERE schedule = '$currentScheduleID'");
   $checksPerSlot = [];
+  $indexToID = [];
   
   # Write each timeslot to its own column header
   for($j = 0; $j < $currentScheduleNumslots; $j++){
     $currentColumn = $timeSlotArray->fetch_assoc();
     $currentColumnString = $currentColumn["datestring"];
     $checksPerSlot[] = 0;
+    $indexToID[] = $currentColumn["ID"];
     echo("<th style=\"width:40px\"><b>$currentColumnString</b></th>");
   }
   echo("</tr>");
@@ -95,6 +100,11 @@ for($i = 1; $i < $num_schedules + 1; $i++) {
       if($currentUserCheckboxes[$l]):
       echo("<td>&#10003</td>");
       $checksPerSlot[$l]++;
+      if($checksPerSlot[$l] > $currentWinnerValue){
+        $currentWinnerValue = $checksPerSlot[$l];
+        $currentWinnerIndex = $l;
+        $currentWinnerID = $indexToID[$l];
+        }
     else:
       echo("<td> </td>");
     endif;
@@ -106,12 +116,17 @@ for($i = 1; $i < $num_schedules + 1; $i++) {
   echo("<td colspan=\"3\"><b>Total</b></td>");
   for($m = 0; $m < $currentScheduleNumslots; $m++) {
     echo("<td><b>$checksPerSlot[$m]</b></td>"); 
+  }
+  
+$_SESSION["best_slot_ID . $i"] = $currentWinnerID;
+$_SESSION["best_slot_value . $i"] = $currentWinnerValue;
+$_SESSION["best_slot_index . $i"] = $currentWinnerIndex;
+  
  }
- // * * * * PRINT EDIT BUTTONS * * * * //
+ 
   echo("</table><br><br>");
 
-} // SCHEDULE
-
+# Store the current winning slots for each schedule
 // * * * * PRINT LOGOUT BUTTON * * * * //
 echo("<br><br><br><br><br><br>");
 echo("<form action=\"logout.php\" method=\"post\"><pre><p align=\"center\"><input type=\"submit\" name=\"logout\" value=\"Logout\">");
