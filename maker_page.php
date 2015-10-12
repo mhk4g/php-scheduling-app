@@ -41,7 +41,7 @@ $scheduleArray = $db->query("SELECT * FROM Schedules WHERE maker = '$maker_ID'")
 $num_schedules = $scheduleArray->num_rows;
 
 # For each schedule belonging to the current maker...
-for($i = 0; $i < $num_schedules; $i++) {
+for($i = 1; $i < $num_schedules + 1; $i++) {
   $currentSchedule = $scheduleArray->fetch_assoc();
   $currentScheduleID = $currentSchedule["ID"];
   $currentScheduleName = $currentSchedule["name"];
@@ -54,7 +54,7 @@ for($i = 0; $i < $num_schedules; $i++) {
   if(!$currentScheduleIsFinalized):
     echo("<form action=\"finalize.php\" method=\"POST\">");
     echo("<input type=\"submit\" name=\"finalize\" value=\"Finalize this schedule\" onclick=\"return confirm('Are you sure you want to finalize this table? This cannot be undone.')\">");
-    echo("<input type=\"hidden\" name=\"which\" value=\"$i\"><p></form>");
+    echo("<input type=\"hidden\" name=\"which\" value=\"$currentScheduleID\"><p></form>");
   else:
     echo("(Final)<p>");
   endif;

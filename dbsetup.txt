@@ -1,0 +1,6 @@
+SET FOREIGN_KEY_CHECKS = 0
+TRUNCATE TABLE Makers
+TRUNCATE TABLE Schedules
+TRUNCATE TABLE Timeslots
+TRUNCATE TABLE Users
+INSERT INTO Makers (name, email, password, securityquestion, securityanswer) VALUES ('Matt Kauper', 'mhk4g@virginia.edu', '$numslots', '0')
