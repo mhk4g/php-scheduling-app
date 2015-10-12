@@ -99,7 +99,7 @@ if(isset($_POST["addtoDB"])) {
          else { 
            echo "Mail successfully sent to $currentrecipient.<br><br>"; 
           }
-
+        $mail->addAddress("NULL");
     }
     
     #$_SESSION["error"] = "Database created successfully!";

@@ -1,9 +1,15 @@
 <?php  
 session_start();
-session_unset();
 
-$scheduleID = $_GET["scheduleID"];
-$userID = (int)$_GET["userID"];
+if(isset($_GET["userID"])):
+  $scheduleID = $_GET["scheduleID"];
+  $userID = (int)$_GET["userID"];
+  $_SESSION["userID"] = $userID;
+  $_SESSION["scheduleID"] = $scheduleID;
+else:
+  $scheduleID = $_SESSION["scheduleID"];
+  $userID = (int)$_SESSION["userID"];
+endif;
 
 $dbuser = "mhk4g";
 $dbpass = "password";
@@ -35,12 +41,12 @@ for($i = 0; $i < $num_schedules; $i++) {
   $currentScheduleNumslots = $currentSchedule["numslots"];
 
   # Create the table to display the schedule
-  echo("<table border = \"1\" cellpadding = \"4\" width=\"90%\" align=\"center\">");
+  echo("<table border = \"1\" cellpadding = \"4\" width=\"50%\" align=\"center\">");
   echo("<caption><h2>$currentScheduleName</h2></caption>");
   echo("<tr align = \"center\">");
   echo("<th style=\"width:40px\">Name</th>");
   echo("<th style=\"width:40px\">Email</th>");
-  echo("<th style=\"width:40px\">ID</th>");
+  echo("<th style=\"width:40px\">Edit</th>");
 
   # Fetch timeslots from DB
   $timeSlotArray = $db->query("SELECT * FROM Timeslots WHERE schedule = '$currentScheduleID'");
@@ -64,14 +70,15 @@ for($i = 0; $i < $num_schedules; $i++) {
     $currentUserID = (int)$currentUser["ID"];
     $currentUserEmail = $currentUser["email"];
     $currentUserName = $currentUser["name"];
-    echo("<tr align = \"center\">");
-    echo("<td>$currentUserName");
+    echo("<tr align = \"center\" valign=\"middle\">");
+    echo("<td>$currentUserName</td>");
+    echo("<td>$currentUserEmail</td>");
     if($currentUserID == $userID):
-      echo("<form action=\"user_edit.php\" method=\"post\"><input type=\"submit\" name=\"submit\" value=\"Edit\"></form>");
+      echo("<td valign=\"center\"><form action=\"user_edit_page.php\" method=\"post\"><p><input type=\"submit\" name=\"submit\" value=\"Edit\"></form>");
+    else:
+      echo("<td><form action=\"user_edit.php\" method=\"post\"><p><input type=\"submit\" name=\"nullbutton\" value=\" \" hidden><font color=\"white\">N\A</font></form>");    
     endif;
     echo("</td>");
-    echo("<td>$currentUserEmail</td>");
-    echo("<td>$currentUserID</td>");
     $currentUserCheckboxes = explode("^", $currentUser["checkboxes"]);
     for($l = 0; $l < $currentScheduleNumslots; $l++) {
       if($currentUserCheckboxes[$l]):
@@ -85,7 +92,7 @@ for($i = 0; $i < $num_schedules; $i++) {
 
   #     
   echo("<tr align = \"center\">");
-  echo("<td colspan=\"3\"><b>Total</b></td>");
+  echo("<td colspan=\"3\"><p><p><b>Total</b><p></td>");
   for($m = 0; $m < $currentScheduleNumslots; $m++) {
     echo("<td><b>$checksPerSlot[$m]</b></td>"); 
  }
