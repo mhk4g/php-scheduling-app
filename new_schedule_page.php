@@ -1,5 +1,8 @@
 <?php 
 session_start();
+print_r($_SESSION);
+print_r($_POST);
+
 if(!isset($_POST["step"])):
   $_SESSION["step"] = 1;
 else:
@@ -18,10 +21,6 @@ else:
   header("Location: login_page.php");
   die;
 endif;
-
-# Test method to print session 
-print_r($_SESSION); 
-print_r($_POST);
 
 $db = new mysqli('localhost', $dbuser, $dbpass, "ScheduleDB");
 if ($db->connect_error) {
@@ -51,7 +50,7 @@ if($step == 1) {
 elseif($step == 2) {
   $numslots = $_POST["numslots"];
   $numusers = $_POST["numusers"];
-  $schedulename = $_POST["schedulename"];
+  $schedulename = strtr($_POST["schedulename"], " ", "*");
   echo("<form action=\"process_new_schedule.php\" method=\"POST\"><pre>
   <p align =\"center\"> Enter user names and email addresses below. You may use only first names or first <i>and</i> last.
   
@@ -59,7 +58,7 @@ elseif($step == 2) {
   <b>User name                Email address</b>         ");
   
   for($i = 1; $i < $_POST["numusers"] + 1; $i++) {
-    echo("<p align=\"center\">$i. <input type=\"text\" name=\"n$i\" size=25 required>     <input type=\"text\" name=\"e$i\" size=25 required>   ");
+    echo("<p align=\"center\">$i. <input type=\"text\" name=\"n$i\" size=25 autocomplete=\"off\" required>     <input type=\"text\" name=\"e$i\" size=25 autocomplete=\"off\" required>   ");
   } 
   $step++;
  echo("
@@ -71,10 +70,10 @@ elseif($step == 2) {
  <b>Time slots</b>");
  
  for($i = 1; $i < $numslots + 1; $i++) {
-   echo("<p align=\"center\">$i. <input type=\"text\" name=\"s$i\" size=25 required>");
+   echo("<p align=\"center\">$i. <input type=\"text\" name=\"s$i\" size=25 autocomplete=\"off\" required>");
  }
  $step++;
-echo("<p align=\"center\"><input type=\"hidden\" name=\"numslots\" value=$numslots><input type=\"hidden\" name=\"numslots\" value=$numusers><input type=\"hidden\" name=\"schedulename\" value=$schedulename>
+echo("<p align=\"center\"><input type=\"hidden\" name=\"numslots\" value=$numslots><input type=\"hidden\" name=\"numusers\" value=$numusers><input type=\"hidden\" name=\"schedulename\" value=$schedulename>
 <p align =\"center\"><b>Step $step</b>
 
 

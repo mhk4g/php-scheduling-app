@@ -31,8 +31,6 @@ for($i = 0; $i < $result->num_rows; $i++):
   echo("<tc>$timeslot</tc>");
 endfor;
 
-#   *IDEA*: Add each user's checkmark list as a serialized array column in the user table
-
 // Printing each user's names and checkmarks to the screen 
 // Serialize the array? Give each checkmark its own boolean-sized entry?
 $result = $db->query("SELECT * FROM Users WHERE Schedule = '$scheduleID'");

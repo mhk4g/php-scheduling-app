@@ -13,7 +13,7 @@ if ($db->connect_error) {
     die("Could not connect to database: " . $db->connect_error);
   }
   
-$result = $db->query("SELECT name FROM Users WHERE iD='$userID'");
+$result = $db->query("SELECT name FROM Users WHERE ID='$userID'");
 $resultArray = $result->fetch_assoc();
 $userFirstName = explode(" ",$resultArray["name"])[0];
 
