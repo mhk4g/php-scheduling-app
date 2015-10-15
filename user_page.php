@@ -31,7 +31,7 @@ echo("<p><pre><font color=\"black\"><p align=\"center\">Welcome, $userFirstName!
 # Get and store the maker ID in a local variable 
 
 $scheduleArray = $db->query("SELECT * FROM Schedules WHERE ID = '$scheduleID'");
-$num_schedules = 1;
+$num_schedules = $scheduleArray->num_rows;
 
 # For each schedule belonging to the current maker...
 for($i = 0; $i < $num_schedules; $i++) {
@@ -40,12 +40,17 @@ for($i = 0; $i < $num_schedules; $i++) {
   $currentScheduleName = $currentSchedule["name"];
   $currentScheduleNumslots = $currentSchedule["numslots"];
   $currentScheduleFinalized = (bool)$currentSchedule["finalized"];
-
+  $currentScheduleWinner = $currentSchedule["winningslotindex"];
+  if($currentScheduleFinalized):
+    $winnerTemp = $db->query("SELECT datestring FROM Timeslots WHERE ID = '$currentScheduleWinner'");
+    $winnerString = $winnerTemp->fetch_row()[0];
+  endif;
+  
   # Create the table to display the schedule
   echo("<table border = \"1\" cellpadding = \"4\" width=\"50%\" align=\"center\">");
   echo("<caption><h2>$currentScheduleName</h2>");
   if($currentScheduleFinalized):
-    echo("(Final");
+    echo("<p align=\"center\">(Final: $winnerString)");
   endif;
   echo("</caption>");
   echo("<tr align = \"center\">");
@@ -78,7 +83,7 @@ for($i = 0; $i < $num_schedules; $i++) {
     echo("<tr align = \"center\" valign=\"middle\">");
     echo("<td>$currentUserName</td>");
     echo("<td>$currentUserEmail</td>");
-    if($currentUserID == $userID):
+    if($currentUserID == $userID && !$currentScheduleFinalized):
       echo("<td valign=\"center\"><form action=\"user_edit_page.php\" method=\"post\"><p><input type=\"submit\" name=\"submit\" value=\"Edit\"></form>");
     else:
       echo("<td><form action=\"user_edit.php\" method=\"post\"><p><input type=\"submit\" name=\"nullbutton\" value=\" \" hidden><font color=\"white\">N\A</font></form>");    

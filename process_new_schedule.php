@@ -1,20 +1,23 @@
 <?php
 session_start();
 
+# Database user/pass
 $dbuser = "mhk4g";
 $dbpass = "password";
+
+# POST and SESSION variables
 $numusers = $_POST["numusers"];
 $numslots = $_POST["numslots"];
 $schedulename = strtr($_POST["schedulename"], "*", " ");
 $maker_ID = $_SESSION["maker_ID"];
 
+# Initialize mailer
 $mailpath = '/Applications/XAMPP/xamppfiles/PHPMailer';
-
-  // Add the new path items to the previous PHP path
 $path = get_include_path();
 set_include_path($path . PATH_SEPARATOR . $mailpath);
 require 'PHPMailerAutoload.php';
 
+# Connect to DB
 $db = new mysqli('localhost', $dbuser, $dbpass, "ScheduleDB");
 if ($db->connect_error) {
     die("Could not connect to database: " . $db->connect_error);
@@ -84,7 +87,7 @@ if(isset($_POST["addtoDB"])) {
       
         // Put information into the message
         $mail->addAddress($currentrecipient);
-        $mail->SetFrom("DBMailer.mhk4g@gmail.com", "Maker DB");
+        $mail->SetFrom("DBMailer.mhk4g@gmail.com", "MakerDB");
         $mail->Subject = "$subj";
         $mail->Body = "$msg";
 

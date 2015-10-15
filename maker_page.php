@@ -49,17 +49,23 @@ for($i = 1; $i < $num_schedules + 1; $i++) {
   $currentScheduleID = $currentSchedule["ID"];
   $currentScheduleName = $currentSchedule["name"];
   $currentScheduleNumslots = $currentSchedule["numslots"];
-  $currentScheduleIsFinalized = $currentSchedule["finalized"];
+  $currentScheduleFinalized = (bool)$currentSchedule["finalized"];
+  $currentScheduleWinner = $currentSchedule["winningslotindex"];
+  if($currentScheduleFinalized):
+    $winnerTemp = $db->query("SELECT datestring FROM Timeslots WHERE ID = '$currentScheduleWinner'");
+    $winnerString = $winnerTemp->fetch_row()[0];
+  endif;
+;
 
   # Create the table to display the schedule
   echo("<table border = \"1\" cellpadding = \"4\" width=\"50%\" align=\"center\">");
   echo("<caption><h2>$currentScheduleName</h2>");
-  if(!$currentScheduleIsFinalized):
+  if(!$currentScheduleFinalized):
     echo("<form action=\"process_finalize.php\" method=\"POST\">");
     echo("<input type=\"submit\" name=\"finalize\" value=\"Finalize this schedule\" onclick=\"return confirm('Are you sure you want to finalize this table? This cannot be undone.')\">");
     echo("<input type=\"hidden\" name=\"which\" value=\"$currentScheduleID\"><p></form>");
   else:
-    echo("(Final)<p>");
+    echo("<p align=\"center\">(Final: $winnerString)");
   endif;
   echo("</caption>");
   echo("<tr align = \"center\">");
@@ -119,10 +125,15 @@ for($i = 1; $i < $num_schedules + 1; $i++) {
   }
 
 # Store the current winning slots for each schedule  
-$_SESSION["best_slot_ID . $i"] = $currentWinnerID;
-$_SESSION["best_slot_value . $i"] = $currentWinnerValue;
-$_SESSION["best_slot_index . $i"] = $currentWinnerIndex;
+$_SESSION["best_slot_ID$currentScheduleID"] = $currentWinnerID;
+$_SESSION["best_slot_value$currentScheduleID"] = $currentWinnerValue;
+$_SESSION["best_slot_index$currentScheduleID"] = $currentWinnerIndex;
   
+  $checksPerSlot = [];
+  $indexToID = [];
+  $currentWinnerValue = 0;
+  $currentWinnerID = 0;
+  $currentWinnerIndex = 0;
  }
  
   echo("</table><br><br>");
