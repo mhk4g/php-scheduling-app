@@ -76,7 +76,8 @@ foreach($SQLcommands as $c):
 endforeach;
 
 if($success):
-  echo(str_repeat("<br>", 8) . "<p align=\"center\"><h2>Database initialization complete. Click <a href='login_page.php'>here</a> to proceed.</h2>");
+  echo(str_repeat("<br>", 10));
+  echo("<h2><p align=\"center\">Database initialization complete. Click <a href='login_page.php'>here</a> to proceed to login page.</h2>");
 else:
   echo("Yeah, something went wrong.<br>");
 endif;

@@ -1,7 +1,5 @@
 <?php
 session_start();
-print_r($_SESSION);
-print_r($_POST);
 
 $dbuser = "mhk4g";
 $dbpass = "password";
@@ -75,10 +73,8 @@ if(isset($_POST["addtoDB"])) {
         
     for($k = 0; $k < $numusers; $k++) {
         $userID = $userIDarray->fetch_row()[0];
-        echo("UserID: $userID ");
         $temprecipient = $db->query("SELECT email FROM Users WHERE ID = '$userID'");
         $currentrecipient = $temprecipient->fetch_row()[0];
-        echo("Current recipient: $currentrecipient<br>");
         
         $msg = "<pre><h2>MakerDB Schedule Created!</h2><br><p>Hello! 
         
@@ -88,7 +84,7 @@ if(isset($_POST["addtoDB"])) {
       
         // Put information into the message
         $mail->addAddress($currentrecipient);
-        $mail->SetFrom($sender);
+        $mail->SetFrom("DBMailer.mhk4g@gmail.com", "Maker DB");
         $mail->Subject = "$subj";
         $mail->Body = "$msg";
 
@@ -99,17 +95,11 @@ if(isset($_POST["addtoDB"])) {
          else { 
            echo "Mail successfully sent to $currentrecipient.<br><br>"; 
           }
-        $mail->addAddress("NULL");
+        $mail->clearAddresses();
     }
-    
-    #$_SESSION["error"] = "Database created successfully!";
-    #header("Location: maker_page.php");
-    
-    /*IDEA: USE THIS
-    DELETE FROM `ScheduleDB`.`Timeslots` WHERE `timeslots`.`maker` = 21;
-    DELETE FROM `ScheduleDB`.`Users` WHERE `users`.`maker` = 21;
-    */
-      
+    $_SESSION["error"] = "Database created successfully!";
+    header("Location: maker_page.php");
+        
   # Otherwise, the insert fails because 
   else:
       echo("SOMETHING WENT WRONG");

@@ -1,7 +1,5 @@
 <?php 
 session_start();
-print_r($_SESSION);
-print_r($_POST);
 
 if(!isset($_POST["step"])):
   $_SESSION["step"] = 1;

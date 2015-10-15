@@ -39,10 +39,15 @@ for($i = 0; $i < $num_schedules; $i++) {
   $currentScheduleID = $currentSchedule["ID"];
   $currentScheduleName = $currentSchedule["name"];
   $currentScheduleNumslots = $currentSchedule["numslots"];
+  $currentScheduleFinalized = (bool)$currentSchedule["finalized"];
 
   # Create the table to display the schedule
   echo("<table border = \"1\" cellpadding = \"4\" width=\"50%\" align=\"center\">");
-  echo("<caption><h2>$currentScheduleName</h2></caption>");
+  echo("<caption><h2>$currentScheduleName</h2>");
+  if($currentScheduleFinalized):
+    echo("(Final");
+  endif;
+  echo("</caption>");
   echo("<tr align = \"center\">");
   echo("<th style=\"width:40px\">Name</th>");
   echo("<th style=\"width:40px\">Email</th>");

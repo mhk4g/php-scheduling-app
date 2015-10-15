@@ -100,11 +100,11 @@ for($i = 1; $i < $num_schedules + 1; $i++) {
       if($currentUserCheckboxes[$l]):
       echo("<td>&#10003</td>");
       $checksPerSlot[$l]++;
-      if($checksPerSlot[$l] > $currentWinnerValue){
+      if($checksPerSlot[$l] > $currentWinnerValue):
         $currentWinnerValue = $checksPerSlot[$l];
         $currentWinnerIndex = $l;
         $currentWinnerID = $indexToID[$l];
-        }
+      endif;
     else:
       echo("<td> </td>");
     endif;
@@ -117,7 +117,8 @@ for($i = 1; $i < $num_schedules + 1; $i++) {
   for($m = 0; $m < $currentScheduleNumslots; $m++) {
     echo("<td><b>$checksPerSlot[$m]</b></td>"); 
   }
-  
+
+# Store the current winning slots for each schedule  
 $_SESSION["best_slot_ID . $i"] = $currentWinnerID;
 $_SESSION["best_slot_value . $i"] = $currentWinnerValue;
 $_SESSION["best_slot_index . $i"] = $currentWinnerIndex;
@@ -126,7 +127,7 @@ $_SESSION["best_slot_index . $i"] = $currentWinnerIndex;
  
   echo("</table><br><br>");
 
-# Store the current winning slots for each schedule
+
 // * * * * PRINT LOGOUT BUTTON * * * * //
 echo("<br><br><br><br><br><br>");
 echo("<form action=\"logout.php\" method=\"post\"><pre><p align=\"center\"><input type=\"submit\" name=\"logout\" value=\"Logout\">");

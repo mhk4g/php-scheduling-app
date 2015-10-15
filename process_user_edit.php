@@ -6,11 +6,6 @@ $dbpass = "password";
 $numslots = $_SESSION["numslots"];
 $userID = $_SESSION["userID"];
 $sessionID = $_SESSION["scheduleID"];
-echo("POST: ");
-print_r($_POST);
-echo("<br>SESSION: ");
-print_r($_SESSION);
-echo("<br>");
 
 $writestring = "";
 $writestring = $writestring . (isset($_POST["box0"]) ? "1"  : (string)"0");
@@ -32,5 +27,5 @@ if ($db->connect_error) {
   
 $result = $db->query("UPDATE Users SET checkboxes = '$writestring' WHERE ID = '$userID'");
 
-#header("Location: user_page.php");
+header("Location: user_page.php");
  ?>
