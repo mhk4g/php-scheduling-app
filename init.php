@@ -54,7 +54,7 @@ $SQLcommands[] = "INSERT INTO Timeslots (schedule, maker, datestring) VALUES ('3
 $SQLcommands[] = "INSERT INTO Timeslots (schedule, maker, datestring) VALUES ('3', '2', '10/17/2015 8:00')";
 
 # INSERT USERS
-$SQLcommands[] = "INSERT INTO Users (email, name, schedule, maker, checkboxes) VALUES ('mhk4g@gmail.com', 'Matt Kauper', '1', '1', '0^1^0^0^1^1')";
+$SQLcommands[] = "INSERT INTO Users (email, name, schedule, maker, checkboxes) VALUES ('mhk4g@virginia.edu', 'Matt Kauper', '1', '1', '0^1^0^0^1^1')";
 $SQLcommands[] = "INSERT INTO Users (email, name, schedule, maker, checkboxes) VALUES ('jean@example.ex', 'Jean Baudrillard', '1', '1', '1^1^0^0^0^0')";
 $SQLcommands[] = "INSERT INTO Users (email, name, schedule, maker, checkboxes) VALUES ('susan@example.ex', 'Susan Sontag', '1', '1', '0^1^0^1^0^1')";
 $SQLcommands[] = "INSERT INTO Users (email, name, schedule, maker, checkboxes) VALUES ('soren@example.ex', 'Soren Kierkegaard', '1', '1', '1^1^0^1^1^0')";

@@ -8,13 +8,6 @@ else:
   header("Location: maker_page.php");
 endif;
 
-# TEST METHODS
-echo("SESSION: ");
-print_r($_SESSION);
-echo("<br><br>POST: ");
-print_r($_POST);
-echo("<br>");
-
 $winnerID = (int)$_SESSION["best_slot_ID$IDtoFinalize"];
 $winnerValue = $_SESSION["best_slot_value$IDtoFinalize"];
 $winnerIndex = $_SESSION["best_slot_index$IDtoFinalize"];
@@ -37,7 +30,7 @@ if ($db->connect_error) {
 
 # Sets the finalize flag and copies the winning slot's index to the schedule's winning slot index attribute
 $finalize1 = $db->query("UPDATE Schedules SET finalized = '1' WHERE ID = '$IDtoFinalize'");
-$finalize2 = $db->query("UPDATE Schedules SET winningslotindex = '$winnerIndex' WHERE ID = '$IDtoFinalize'");
+$finalize2 = $db->query("UPDATE Schedules SET winningslotID = '$winnerID' WHERE ID = '$IDtoFinalize'");
 $scheduleArray = $db->query("SELECT * FROM Schedules WHERE ID = '$IDtoFinalize'");
 $scheduleRow = $scheduleArray->fetch_assoc();
 $winningSlotArray = $db->query("SELECT * FROM Timeslots WHERE ID = '$winnerID'");
@@ -106,6 +99,6 @@ if($finalize1 && $finalize2 && $winningSlotArray && $scheduleRow):
 else:
     echo("SOMETHING WENT WRONG");
 endif;
-$_SESSION["error"] = "Session finalized successfully!";
-#header("Location: maker_page.php");
+$_SESSION["error"] = "Schedule finalized successfully!";
+header("Location: maker_page.php");
 ?>

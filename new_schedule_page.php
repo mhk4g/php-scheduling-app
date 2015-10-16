@@ -42,7 +42,7 @@ if($step == 1) {
  How many users would you like to add?      <input type=\"number\" name=\"numusers\" autocomplete=\"off\" min=\"2.0\" max=\"30.0\" step=\"1.0\" required>
   
  How many time slots would you like to add? <input type=\"number\" name=\"numslots\" autocomplete=\"off\" min=\"2.0\" max=\"10.0\" step=\"1.0\" required>
- <p align=\"center\"><input type=\"hidden\" name=\"step\" value=2><input type=\"submit\" name=\"submit\" value=\"Submit\"></form>"); 
+ <p align=\"center\"><input type=\"hidden\" name=\"step\" value=2><input type=\"submit\" name=\"submit\" value=\"Submit\"></form>");
 }
 
 elseif($step == 2) {

@@ -40,7 +40,7 @@ for($i = 0; $i < $num_schedules; $i++) {
   $currentScheduleName = $currentSchedule["name"];
   $currentScheduleNumslots = $currentSchedule["numslots"];
   $currentScheduleFinalized = (bool)$currentSchedule["finalized"];
-  $currentScheduleWinner = $currentSchedule["winningslotindex"];
+  $currentScheduleWinner = $currentSchedule["winningslotID"];
   if($currentScheduleFinalized):
     $winnerTemp = $db->query("SELECT datestring FROM Timeslots WHERE ID = '$currentScheduleWinner'");
     $winnerString = $winnerTemp->fetch_row()[0];

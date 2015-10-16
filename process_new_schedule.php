@@ -27,12 +27,11 @@ if ($db->connect_error) {
 if(isset($_POST["addtoDB"])) {
   
   # STEP 1: CREATE SCHEDULE
-  $schedulequery = "INSERT INTO Schedules (maker, name, numslots, finalized) VALUES ('$maker_ID', '$schedulename', '$numslots', '0')";
+  $schedulequery = "INSERT INTO Schedules (maker, name, numslots, finalized) VALUES ('$maker_ID', '$schedulename', '$numslots', 0)";
   $scheduleresult = $db->query($schedulequery);
   
   # STEP 2: GET THE ID OF NEWLY CREATED SCHEDULE
-  $IDquery = "SELECT ID FROM Schedules WHERE maker = '$maker_ID' AND name = '$schedulename'";
-  $IDresult = $db->query($IDquery);
+  $IDresult = $db->query("SELECT ID FROM Schedules WHERE maker = '$maker_ID' AND name = '$schedulename'");
   $scheduleID = $IDresult->fetch_assoc()["ID"];
   
   # STEP 3: INSERT THE TIMESLOTS
